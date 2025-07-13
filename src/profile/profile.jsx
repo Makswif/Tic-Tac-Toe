@@ -1,5 +1,5 @@
 import Image from "next/image";
-import AvatarSrc from "../Images/Avatar_1.svg";
+import AvatarSrc from "../Images/avatar_1.svg";
 import { clsx } from "clsx";
 
 export function Profile({ className, name, rating, image = AvatarSrc }) {

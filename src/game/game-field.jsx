@@ -15,6 +15,7 @@ export function GameField({
   currentCell,
   nextMove,
   handleMoveClick,
+  winnerSequence,
 }) {
   // Кнопка для предложения ничьей
   const action1 = (
@@ -50,6 +51,7 @@ export function GameField({
         {cells.map((symbol, i) => (
           <GameCell
             key={i}
+            isWinner={winnerSequence?.includes(i)}
             onClick={() => {
               handleMoveClick(i); // Обработка клика по клетке с индексом i
             }}
@@ -64,11 +66,14 @@ export function GameField({
 }
 
 // Компонент отдельной клетки игрового поля
-function GameCell({ children, onClick }) {
+function GameCell({ children, onClick, isWinner }) {
   return (
     <button
       onClick={onClick}
-      className="border border-slate-200 flex items-center justify-center"
+      className={clsx(
+        "border border-slate-200 flex items-center justify-center",
+        isWinner && "bg-green-400",
+      )}
     >
       {children}
     </button>

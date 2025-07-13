@@ -3,6 +3,12 @@ import GameTitle from "../src/game/game-title";
 import { GameField, GameInfo, useGameState } from "../src/game";
 import { useState } from "react";
 
+/*
+
+(x + y * 19)
+
+*/
+
 export default function HomePage() {
   const [playersCount] = useState(4);
 
@@ -11,7 +17,7 @@ export default function HomePage() {
   // currentCell - текущий активный символ
   // nextMove - следующий ход
   // handleMoveClick - обработчик клика по клетке
-  const [cells, currentCell, nextMove, handleMoveClick] =
+  const [cells, currentCell, nextMove, handleMoveClick, winner] =
     useGameState(playersCount);
 
   return (
@@ -31,6 +37,7 @@ export default function HomePage() {
           handleMoveClick={handleMoveClick}
           playersCount={playersCount}
           className="mt-6"
+          winnerSequence={winner}
         />
       </main>
     </div>

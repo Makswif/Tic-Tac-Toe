@@ -74,10 +74,10 @@ function Playerinfo({ playerInfo, isRight, isTimerMove }) {
       const Timer = setInterval(() => {
         setSeconds((s) => Math.max(s - 1, 0));
       }, 1000);
-      return () =>{
+      return () => {
         clearInterval(Timer);
-        setSeconds(second)
-      }
+        setSeconds(second);
+      };
     }
   }, [isTimerMove]);
 
@@ -86,7 +86,7 @@ function Playerinfo({ playerInfo, isRight, isTimerMove }) {
       return isDangertime ? "text-orange-500" : "text-slate-900";
     }
     return "text-slate-300";
-  }
+  };
 
   return (
     <div className="flex gap-3 items-center">
@@ -94,7 +94,7 @@ function Playerinfo({ playerInfo, isRight, isTimerMove }) {
         className={clsx(
           "text-lg font-semibold order-1 w-[60px]",
           isRight && "order-1",
-          TimerColor()
+          TimerColor(),
         )}
       >
         {minutesString}:{secondString}

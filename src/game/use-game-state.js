@@ -1,14 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Game_Symbol, Move_Order } from "./constants";
-
-// Принимает текущий символ и возвращает следующий символ согласно порядку ходов
-function NextMove(currentCell, playersCount) {
-  const slicedMoveOrder = Move_Order.slice(0, playersCount);
-  // Находим индекс текущего символа в массиве порядка ходов
-  const nextMoveIndex = slicedMoveOrder.indexOf(currentCell) + 1;
-  // Возвращаем следующий символ, если он есть, иначе первый символ из массива (циклический переход)
-  return slicedMoveOrder[nextMoveIndex] ?? slicedMoveOrder[0];
-}
+import { computerWinner, NextMove } from "./model";
 
 // Кастомный хук для управления состоянием игры
 export function useGameState(playersCount) {
@@ -17,6 +9,8 @@ export function useGameState(playersCount) {
     cells: new Array(19 * 19).fill(null), // Создаем пустое поле 19x19, заполненное null
     currentCell: Game_Symbol.O, // Начинаем с символа O
   }));
+
+  const winnerSequence = computerWinner(cells);
 
   // Вычисляем следующий ход на основе текущего символа
   const nextMove = NextMove(currentCell, playersCount);
@@ -41,5 +35,5 @@ export function useGameState(playersCount) {
   };
 
   // Возвращаем массив с данными состояния и функцией для обновления
-  return [cells, currentCell, nextMove, handleMoveClick];
+  return [cells, currentCell, nextMove, handleMoveClick, winnerSequence];
 }
