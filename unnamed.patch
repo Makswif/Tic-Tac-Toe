@@ -1,0 +1,182 @@
+Index: src/GameCell.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/GameCell.jsx b/src/GameCell.jsx
+new file mode 100644
+--- /dev/null	(date 1750880492112)
++++ b/src/GameCell.jsx	(date 1750880492112)
+@@ -0,0 +1,11 @@
++function GameCell({isWinner, onclick, symbol, i}) {
++  return (
++    <button
++      onClick={onclick}
++      key={i}
++      className={`${styles.cell} ${isWinner ? styles['cell--win'] : ''}`}
++    >
++      {symbol ? <GameSymbol symbol={symbol}/> : null}
++    </button>
++  );
++}
+\ No newline at end of file
+Index: src/Gameinfo.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Gameinfo.jsx b/src/Gameinfo.jsx
+new file mode 100644
+--- /dev/null	(date 1750880492089)
++++ b/src/Gameinfo.jsx	(date 1750880492089)
+@@ -0,0 +1,21 @@
++function GameInfo({isdraw, WinnerSymbol, currentStep}) {
++  if (isdraw) {
++    return (
++      <div className={styles['game-info']}>
++        Ничья
++      </div>
++    );
++  }
++  if (WinnerSymbol) {
++    return (
++      <div className={styles['game-info']}>
++        Победитель: <GameSymbol symbol={WinnerSymbol} />
++      </div>
++    );
++  }
++  return (
++    <div className={styles['game-info']}>
++      Ход: <GameSymbol symbol={currentStep} />
++    </div>
++  );
++}
+\ No newline at end of file
+Index: src/handClean.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/handClean.jsx b/src/handClean.jsx
+new file mode 100644
+--- /dev/null	(date 1750880492136)
++++ b/src/handClean.jsx	(date 1750880492136)
+@@ -0,0 +1,8 @@
++import GameInfo from './GameInfo';
++
++
++
++function handClean() {
++  setCells(Array.from({ length: 9 }, () => null));
++  setWinnerSequense(null);
++}
+\ No newline at end of file
+Index: src/GameSymbol.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/GameSymbol.jsx b/src/GameSymbol.jsx
+new file mode 100644
+--- /dev/null	(date 1750880492178)
++++ b/src/GameSymbol.jsx	(date 1750880492178)
+@@ -0,0 +1,9 @@
++function GameSymbol({symbol}) {
++  const getSymbolClassName = (symbol) => {
++    if (symbol === SYMBOL_O) return styles['symbol--o'];
++    if (symbol === SYMBOL_X) return styles['symbol--x'];
++    return styles['symbol--empty'];
++  };
++
++  return <span className={`${styles.symbol} ${getSymbolClassName(symbol)}`}>{symbol}</span>;
++}
+Index: src/Tic-Tac-Toe.jsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Tic-Tac-Toe.jsx b/src/Tic-Tac-Toe.jsx
+--- a/src/Tic-Tac-Toe.jsx
++++ b/src/Tic-Tac-Toe.jsx	(date 1750880492248)
+@@ -1,5 +1,8 @@
+ import useGameState from "./useGameState.jsx";
+ import styles from "../style/game.module.css"; // Импорт CSS модуля
++import handClean from "../src/handClean";
++
++
+ 
+ export default function TicTacToe() {
+   const {
+@@ -15,54 +18,6 @@
+     SYMBOL_O,
+   } = useGameState();
+ 
+-  function GameSymbol({symbol}) {
+-    const getSymbolClassName = (symbol) => {
+-      if (symbol === SYMBOL_O) return styles['symbol--o'];
+-      if (symbol === SYMBOL_X) return styles['symbol--x'];
+-      return styles['symbol--empty'];
+-    };
+-
+-    return <span className={`${styles.symbol} ${getSymbolClassName(symbol)}`}>{symbol}</span>;
+-  }
+-
+-  function handClean() {
+-    setCells(Array.from({ length: 9 }, () => null));
+-    setWinnerSequense(null);
+-  }
+-
+-  function GameInfo({isdraw, WinnerSymbol, currentStep}) {
+-    if (isdraw) {
+-      return (
+-        <div className={styles['game-info']}>
+-          Ничья
+-        </div>
+-      );
+-    }
+-    if (WinnerSymbol) {
+-      return (
+-        <div className={styles['game-info']}>
+-          Победитель: <GameSymbol symbol={WinnerSymbol} />
+-        </div>
+-      );
+-    }
+-    return (
+-      <div className={styles['game-info']}>
+-        Ход: <GameSymbol symbol={currentStep} />
+-      </div>
+-    );
+-  }
+-
+-  function GameCell({isWinner, onclick, symbol, i}) {
+-    return (
+-      <button
+-        onClick={onclick}
+-        key={i}
+-        className={`${styles.cell} ${isWinner ? styles['cell--win'] : ''}`}
+-      >
+-        {symbol ? <GameSymbol symbol={symbol}/> : null}
+-      </button>
+-    );
+-  }
+ 
+   return (
+     <div className={styles.game}>
+Index: style/game.module.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/style/game.module.css b/style/game.module.css
+--- a/style/game.module.css
++++ b/style/game.module.css	(date 1750880153636)
+@@ -92,4 +92,8 @@
+ 
+ .button-24:active {
+   opacity: .5;
++}
++
++.cell--win {
++  background: #FF4742;
+ }
+\ No newline at end of file

@@ -1,0 +1,18 @@
+Index: style/game.module.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/style/game.module.css b/style/game.module.css
+--- a/style/game.module.css
++++ b/style/game.module.css
+@@ -92,4 +92,8 @@
+ 
+ .button-24:active {
+   opacity: .5;
++}
++
++.cell--win {
++  background: #FF4742;
+ }
+\ No newline at end of file
