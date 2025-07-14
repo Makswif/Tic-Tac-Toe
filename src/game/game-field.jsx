@@ -16,6 +16,7 @@ export function GameField({
   nextMove,
   handleMoveClick,
   winnerSequence,
+  winnerSymbol,
 }) {
   // Кнопка для предложения ничьей
   const action1 = (
@@ -51,6 +52,7 @@ export function GameField({
         {cells.map((symbol, i) => (
           <GameCell
             key={i}
+            disebled={!!winnerSymbol}
             isWinner={winnerSequence?.includes(i)}
             onClick={() => {
               handleMoveClick(i); // Обработка клика по клетке с индексом i
@@ -66,9 +68,10 @@ export function GameField({
 }
 
 // Компонент отдельной клетки игрового поля
-function GameCell({ children, onClick, isWinner }) {
+function GameCell({ children, onClick, isWinner, disebled }) {
   return (
     <button
+      disabled={disebled}
       onClick={onClick}
       className={clsx(
         "border border-slate-200 flex items-center justify-center",

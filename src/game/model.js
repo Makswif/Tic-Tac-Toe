@@ -1,7 +1,9 @@
 import { Move_Order } from "./constants";
 
-export function NextMove(currentCell, playersCount) {
-  const slicedMoveOrder = Move_Order.slice(0, playersCount);
+export function NextMove(currentCell, playersCount, PlayerTimeOver) {
+  const slicedMoveOrder = Move_Order.slice(0, playersCount).filter(
+    (symbol) => !PlayerTimeOver.includes(symbol),
+  );
   // Находим индекс текущего символа в массиве порядка ходов
   const nextMoveIndex = slicedMoveOrder.indexOf(currentCell) + 1;
   // Возвращаем следующий символ, если он есть, иначе первый символ из массива (циклический переход)
@@ -24,6 +26,14 @@ export function computerWinner(cells, sequenceSize = 5, filedSize = 19) {
       res[2].push(j - gap + index);
       res[3].push(filedSize * (j - gap) + (j - gap) + index);
     }
+
+    const non = index % filedSize;
+    if (non < gap || non >= filedSize - gap) {
+      res.shift();
+      res.shift();
+      res.shift();
+    }
+
     return res;
   }
 

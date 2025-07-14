@@ -42,7 +42,13 @@ const players = [
   },
 ];
 
-export function GameInfo({ className, playersCount, currentCell }) {
+export function GameInfo({
+  className,
+  playersCount,
+  currentCell,
+  isWinner,
+  onPlayerTimeOver,
+}) {
   return (
     <div
       className={clsx(
@@ -55,15 +61,16 @@ export function GameInfo({ className, playersCount, currentCell }) {
           key={player.id}
           playerInfo={player}
           isRight={index % 2 === 1}
-          isTimerMove={currentCell === player.symbol}
+          onTimeOver={() => onPlayerTimeOver(player.symbol)}
+          isTimerMove={currentCell === player.symbol && !isWinner}
         />
       ))}
     </div>
   );
 }
 
-function Playerinfo({ playerInfo, isRight, isTimerMove }) {
-  const [second, setSeconds] = useState(500);
+function Playerinfo({ playerInfo, isRight, isTimerMove, onTimeOver }) {
+  const [second, setSeconds] = useState(4);
 
   const minutesString = String(Math.floor(second / 60)).padStart(2, "0");
   const secondString = String(second % 60).padStart(2, "0");
@@ -80,6 +87,12 @@ function Playerinfo({ playerInfo, isRight, isTimerMove }) {
       };
     }
   }, [isTimerMove]);
+
+  useEffect(() => {
+    if (second === 0) {
+      onTimeOver();
+    }
+  }, [second]);
 
   const TimerColor = () => {
     if (isTimerMove) {

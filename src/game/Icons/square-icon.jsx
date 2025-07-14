@@ -3,8 +3,8 @@ export function SquareIcon({ className }) {
     <svg
       className={className}
       xmlns="http://www.w3.org/2000/svg"
-      width="256"
-      height="256"
+      width="14"
+      height="14"
       viewBox="0 0 90 90"
       fill="currentColor"
     >
