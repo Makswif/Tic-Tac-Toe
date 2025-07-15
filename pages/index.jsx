@@ -2,7 +2,10 @@ import Header from "../src/header/Header";
 import GameTitle from "../src/game/game-title";
 import { GameField, GameInfo, useGameState } from "../src/game";
 import { useState } from "react";
-import {GameSymbol} from "../src/game/game-symbol";
+import { GameSymbol } from "../src/game/game-symbol";
+import { UiModal } from "../src/uikit/ui-modal";
+import { UiButton } from "../src/uikit/ui-button";
+import {log} from "next/dist/server/typescript/utils";
 
 /*
 
@@ -41,12 +44,10 @@ export default function HomePage() {
           className="mt-4"
         />
         {winnerSymbol && (
-            <div className="my-4">
-              <GameSymbol symbol={winnerSymbol} />
-            </div>
-        )
-
-        }
+          <div className="my-4">
+            <GameSymbol symbol={winnerSymbol} />
+          </div>
+        )}
         <GameField
           cells={cells}
           currentCell={currentCell}
@@ -57,6 +58,24 @@ export default function HomePage() {
           winnerSequence={winner}
           winnerSymbol={winnerSymbol}
         />
+        <UiModal isOpen={winnerSymbol} onClose={() => console.log("close")}>
+          <UiModal.Header>Конец игры</UiModal.Header>
+          <UiModal.Body>
+            <div className="text-sm">
+              <p>
+                Победитель: <span className="text-[#b3c6ff]">Parom</span>
+              </p>
+            </div>
+          </UiModal.Body>
+          <UiModal.Footer>
+            <UiButton size="md" variant="outline">
+              Вернуться
+            </UiButton>
+            <UiButton size="md" variant="primary">
+              Играть снова
+            </UiButton>
+          </UiModal.Footer>
+        </UiModal>
       </main>
     </div>
   );

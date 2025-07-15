@@ -9,6 +9,7 @@ export default function App({ Component, pageProps }) {
   return (
     <main className={clsx(inter.className, "text-[HSL(180°, 0%, 20%)")}>
       <Component {...pageProps} />
+      <div id="modals"></div>
     </main>
   );
 }
