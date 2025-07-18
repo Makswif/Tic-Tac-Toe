@@ -10,17 +10,22 @@
  */
 
 import { clsx } from "clsx";
-import {createPortal} from "react-dom";
+import { createPortal } from "react-dom";
 
-export function UiModal({ width = "md", className, children, isOpen = false, onClose }) {
-
+export function UiModal({
+  width = "md",
+  className,
+  children,
+  isOpen = false,
+  onClose,
+}) {
   const handleClose = (e) => {
     console.log(e.target.closest("[modal]"));
-    onClose()
-  }
+    onClose();
+  };
 
   if (!isOpen) {
-    return null
+    return null;
   }
 
   const modal = (
@@ -45,7 +50,8 @@ export function UiModal({ width = "md", className, children, isOpen = false, onC
           onClick={onClose}
           className="
         absolute top-0 left-[calc(100%+12px)] w-8 h-8 flex items-center justify-center
-        bg-white/10 rounded-full hover:bg-white/30 transition-colors">
+        bg-white/10 rounded-full hover:bg-white/30 transition-colors"
+        >
           <CrossLightIcon className="w-4 h-4 text-white" />
         </button>
         {children}
@@ -56,7 +62,9 @@ export function UiModal({ width = "md", className, children, isOpen = false, onC
 }
 
 UiModal.Header = function UiModalHeader({ children, className }) {
-  return <div className={clsx(className, "px-6 pt-6 pb-6 text-2xl")}>{children}</div>;
+  return (
+    <div className={clsx(className, "px-6 pt-6 pb-6 text-2xl")}>{children}</div>
+  );
 };
 
 UiModal.Body = function UiModalHeader({ children, className }) {
@@ -64,7 +72,11 @@ UiModal.Body = function UiModalHeader({ children, className }) {
 };
 
 UiModal.Footer = function UiModalHeader({ children, className }) {
-  return <div className={clsx(className, "mt-auto p-6 flex gap-4 justify-end")}>{children}</div>;
+  return (
+    <div className={clsx(className, "mt-auto p-6 flex gap-4 justify-end")}>
+      {children}
+    </div>
+  );
 };
 
 function CrossLightIcon({ className }) {

@@ -1,9 +1,9 @@
 import { clsx } from "clsx";
 import { Profile } from "../profile";
-import { XIcon } from "./Icons/x-icon";
-import { OIcon } from "./Icons/o-icon";
-import { GameSymbol } from "./game-symbol";
-import { Game_Symbol } from "./constants";
+import { XIcon } from "../game-new/ui/Icons/x-icon";
+import { OIcon } from "../game-new/ui/Icons/o-icon";
+import { GameSymbol } from "../game-new/ui/game-symbol";
+import { Game_Symbol } from "../game-new/ui/constants";
 
 import avatarSrc1 from "../Images/avatar_1.svg";
 import avatarSrc2 from "../Images/avatar_2.svg";

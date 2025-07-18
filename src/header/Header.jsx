@@ -1,7 +1,7 @@
 import Image from "next/image";
 import LogoSrc from "./Logo.svg";
 import { Profile } from "../profile";
-import { ArrowDownIcon } from "../game/Icons/arrow-down-icon";
+import { ArrowDownIcon } from "../game-new/ui/Icons/arrow-down-icon";
 import { UiButton } from "../uikit/ui-button";
 
 export default function Header() {

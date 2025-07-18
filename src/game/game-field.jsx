@@ -1,11 +1,11 @@
 import { clsx } from "clsx";
-import { OIcon } from "./Icons/o-icon";
-import { XIcon } from "./Icons/x-icon";
+import { OIcon } from "../game-new/ui/Icons/o-icon";
+import { XIcon } from "../game-new/ui/Icons/x-icon";
 import { UiButton } from "../uikit/ui-button";
 import { useState } from "react";
-import { Game_Symbol, Move_Order } from "./constants";
-import { GameSymbol } from "./game-symbol";
-import { useGameState } from "./use-game-state";
+import { Game_Symbol, Move_Order } from "../game-new/ui/constants";
+import { GameSymbol } from "../game-new/ui/game-symbol";
+import { useGameState } from "../game-new/model/use-game-state";
 
 // Основной компонент игрового поля
 export function GameField({
@@ -98,7 +98,12 @@ function GameFiledLayout({ children, className }) {
 }
 
 // Компонент панели с информацией о текущем ходе и кнопками действий
-function GameFieldMoveAndButtons({ action1, action2, currentCell, nextMove }) {
+export function GameFieldMoveAndButtons({
+  action1,
+  action2,
+  currentCell,
+  nextMove,
+}) {
   return (
     <div className="flex justify-center items-center gap-12">
       {action1} {/* Кнопка ничьей */}
@@ -117,7 +122,6 @@ function GameFieldMoveAndButtons({ action1, action2, currentCell, nextMove }) {
     </div>
   );
 }
-
 // Компонент сетки игрового поля
 function GameFieldGrid({ children }) {
   return (
