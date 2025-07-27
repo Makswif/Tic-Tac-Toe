@@ -11,10 +11,10 @@ export const Game_Symbol = {
 };
 
 export const Move_Order = [
-  Game_Symbol.O,
-  Game_Symbol.X,
-  Game_Symbol.TRINGLE,
-  Game_Symbol.SQUARE,
+  Game_Symbol.X, // "cross"
+  Game_Symbol.TRINGLE, // "tringle"
+  Game_Symbol.SQUARE, // "square"
+  Game_Symbol.O, // "zero"
 ];
 
 export const Players = [

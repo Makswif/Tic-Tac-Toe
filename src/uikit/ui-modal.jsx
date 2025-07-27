@@ -19,16 +19,24 @@ export function UiModal({
   isOpen = false,
   onClose,
 }) {
-  const handleClose = (e) => {
-    console.log(e.target.closest("[modal]"));
-    onClose();
-  };
-
   if (!isOpen) {
     return null;
   }
 
-  const modal = (
+  // Sprawdzenie czy kod jest wykonywany w przeglądarce
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  // Znajdujemy element modals lub tworzymy go, jeśli nie istnieje
+  let modalRoot = document.getElementById("modals");
+  if (!modalRoot) {
+    modalRoot = document.createElement("div");
+    modalRoot.id = "modals";
+    document.body.appendChild(modalRoot);
+  }
+
+  return createPortal(
     <div
       className={clsx(
         "fixed inset-0 bg-slate-900/60 backdrop-blur pt-10 pb-10 flex overflow-y-auto",
@@ -56,9 +64,9 @@ export function UiModal({
         </button>
         {children}
       </div>
-    </div>
+    </div>,
+    modalRoot,
   );
-  return createPortal(modal, document.getElementById("modals"));
 }
 
 UiModal.Header = function UiModalHeader({ children, className }) {

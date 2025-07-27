@@ -2,7 +2,9 @@ import { Profile } from "../../profile";
 
 import { clsx } from "clsx";
 import Image from "next/image";
-import { GameSymbol } from "./game-symbol"; // or your image component
+import { GameSymbol } from "./game-symbol";
+import { memo, useEffect, useReducer, useState } from "react";
+import { useNow } from "../lib/timers"; // or your image component
 
 export function PlayerInfo({
   isRight,
@@ -10,18 +12,23 @@ export function PlayerInfo({
   avatar,
   symbol,
   rating,
-  second,
-  isTimerRunning,
+  timer,
+  timerStartAt,
 }) {
+  const now = useNow(1000, timerStartAt);
+  const mils = Math.max(now ? timer - (now - timerStartAt) : timer, 0);
+
+  const seconds = Math.ceil(mils / 1000);
+  const minutesString = String(Math.floor(seconds / 60)).padStart(2, "0");
+  const secondString = String(seconds % 60).padStart(2, "0");
+  const isDangertime = seconds < 20;
+
   const Timecolor = () => {
-    if (isTimerMove) {
+    if (timerStartAt) {
       return isDangertime ? "text-orange-500" : "text-slate-900";
     }
     return "text-slate-300";
   };
-  const minutesString = String(Math.floor(second / 60)).padStart(2, "0");
-  const secondString = String(second % 60).padStart(2, "0");
-  const isDangertime = second < 20;
 
   return (
     <div
@@ -42,7 +49,7 @@ export function PlayerInfo({
         </div>
       </div>
       <div className="h-6 w-px bg-slate-200" />
-      <div className={clsx("text-lg font-semibold w-[60px]", Timecolor)}>
+      <div className={clsx("text-lg font-semibold w-[60px]", Timecolor())}>
         {minutesString}:{secondString}
       </div>
     </div>
