@@ -6,16 +6,16 @@ import PersonSelector from "../src/uikit/fileds/ui-filed-select";
 export default function HomePage() {
   return (
     <HomePageLayout header={<Header />}>
-      {/*<Game />*/}
-      <UITextField
-        label="Label"
-        required
-        helperText
-        placeholder="Placeholder"
-        className="mx-auto max-w-xs"
-        ErrorText="Error Text"
-      />
-      <PersonSelector />
+      <Game />
+      {/*<UITextField*/}
+      {/*  label="Label"*/}
+      {/*  required*/}
+      {/*  helperText*/}
+      {/*  placeholder="Placeholder"*/}
+      {/*  className="mx-auto max-w-xs"*/}
+      {/*  ErrorText="Error Text"*/}
+      {/*/>*/}
+      {/*<PersonSelector />*/}
     </HomePageLayout>
   );
 }

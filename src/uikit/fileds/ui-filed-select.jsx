@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-import { Listbox } from '@headlessui/react'
+import React, { useState } from "react";
+import { Listbox } from "@headlessui/react";
 
 const people = [
-  { id: 1, name: 'Анна Иванова', email: 'anna@example.com' },
-  { id: 2, name: 'Петр Петров', email: 'petr@example.com' },
-  { id: 3, name: 'Мария Сидорова', email: 'maria@example.com' },
-  { id: 4, name: 'Иван Кузнецов', email: 'ivan@example.com' },
-  { id: 5, name: 'Елена Попова', email: 'elena@example.com' },
-]
+  { id: 1, name: "Анна Иванова", email: "anna@example.com" },
+  { id: 2, name: "Петр Петров", email: "petr@example.com" },
+  { id: 3, name: "Мария Сидорова", email: "maria@example.com" },
+  { id: 4, name: "Иван Кузнецов", email: "ivan@example.com" },
+  { id: 5, name: "Елена Попова", email: "elena@example.com" },
+];
 
 export default function PersonSelector() {
-  const [selected, setSelected] = useState(people[0])
+  const [selected, setSelected] = useState(people[0]);
 
   return (
     <div className="w-72 mx-auto mt-8">
@@ -30,7 +30,7 @@ export default function PersonSelector() {
                 key={person.id}
                 className={({ active }) =>
                   `relative cursor-default select-none py-2 px-4 ${
-                    active ? 'bg-[#235678]/10 text-[#235678]' : 'text-gray-900'
+                    active ? "bg-[#235678]/10 text-[#235678]" : "text-gray-900"
                   }`
                 }
                 value={person}
@@ -39,7 +39,7 @@ export default function PersonSelector() {
                   <>
                     <span
                       className={`block truncate ${
-                        selected ? 'font-medium' : 'font-normal'
+                        selected ? "font-medium" : "font-normal"
                       }`}
                     >
                       {person.name}
@@ -54,7 +54,6 @@ export default function PersonSelector() {
           </Listbox.Options>
         </div>
       </Listbox>
-
     </div>
-  )
+  );
 }

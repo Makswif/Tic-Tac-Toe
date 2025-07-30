@@ -9,7 +9,7 @@ export default function Header() {
     <header className="flex h-24 items-center px-8 bg-white shadow-lg ">
       <Image className="h-20 w-20" src={LogoSrc} alt="Logo" />
       <h1 className="m-6 font-[Roboto] text-[#e45651] text-4xl">
-        TT <span className="text-[#225577]">Toe</span>
+        TT <span className="text-[#4a90e2]">Toe</span>
       </h1>
       <div className="w-px h-8 mx-6 bg-gray-200" />
       <UiButton className="w-44" variant="primary" size="md">

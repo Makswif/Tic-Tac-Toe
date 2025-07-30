@@ -48,7 +48,7 @@ export function NextMove(currentMoveOrOptions, playersCountParam, timersParam) {
   }
 
   // 6. Jeśli obecny gracz nie ma czasu, znajdź następnego z czasem
-  if (!!currentPlayerHasTime) {
+  if (!currentPlayerHasTime) {
     // Znajdź pierwszego gracza po bieżącym, który ma czas
     const currentIndex = allPlayers.indexOf(currentMove);
 

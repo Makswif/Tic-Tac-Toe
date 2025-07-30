@@ -18,37 +18,52 @@ export const initGameState = ({ playersCount, defaultTimer }) => {
     playersCount,
     timers,
     currentMoveStart: Date.now(),
+    winnerSymbol: null, // Добавляем поле для отслеживания победителя
   };
 };
 
 export const Game_State_Action = {
   CELL_CLICK: "CELL_CLICK",
   TICK: "TIMER_TICK",
-  // TIMER_TICK: undefined
 };
 
 export const gameStateReducer = (state, action) => {
   switch (action.type) {
     case Game_State_Action.CELL_CLICK: {
       const { index, now } = action;
+
+      // Не позволяем делать ходы если игра закончена
+      if (state.winnerSymbol) {
+        return state;
+      }
+
       // Prevent moves if the cell is already filled
       if (state.cells[index]) {
         return state;
       }
 
-      // Sprawdzenie, czy gracz ma jeszcze czas na wykonanie ruchu
+      // Проверка, есть ли у игрока еще время на выполнение хода
       const diff = now - state.currentMoveStart;
       const currentTimer = state.timers[state.currentCell];
       if (currentTimer - diff <= 0) {
-        // Jeśli czas się skończył, ignorujemy ruch i po prostu aktualizujemy stan
+        // Если время закончилось, игнорируем ход и переходим к следующему игроку
+        const updatedTimers = {
+          ...state.timers,
+          [state.currentCell]: 0,
+        };
+
+        console.log(
+          `Ход игнорирован - время игрока ${state.currentCell} истекло`,
+        );
+
         return {
           ...state,
-          timers: updateTimers(state, now),
+          timers: updatedTimers,
           currentMoveStart: now,
           currentCell: NextMove({
             currentMove: state.currentCell,
             playersCount: state.playersCount,
-            timers: updateTimers(state, now),
+            timers: updatedTimers,
           }),
         };
       }
@@ -57,52 +72,98 @@ export const gameStateReducer = (state, action) => {
       const newCells = [...state.cells];
       newCells[index] = state.currentCell;
 
+      // Обновляем таймеры ПЕРЕД вычислением следующего игрока
+      const updatedTimers = updateTimers(state, now);
+
+      // Проверяем победителя после хода
+      const winnerSequence = computerWinner(newCells);
+      const hasWinner = winnerSequence ? state.currentCell : null;
+
+      console.log(`Ход сделан игроком ${state.currentCell} в ячейку ${index}`);
+      if (hasWinner) {
+        console.log(`🎉 Игрок ${hasWinner} победил!`);
+      }
+
       return {
         ...state,
         cells: newCells,
-        timers: updateTimers(state, now),
+        timers: updatedTimers,
         currentMoveStart: now,
-        currentCell: updateCell(state, index),
+        winnerSymbol: hasWinner,
+        currentCell: hasWinner
+          ? state.currentCell
+          : NextMove({
+              currentMove: state.currentCell,
+              playersCount: state.playersCount,
+              timers: updatedTimers,
+            }),
       };
     }
 
-    // case Game_State_Action.TIMER_TICK: {
-    //   const { symbol, timeLeft } = action;
-    //   return {
-    //     ...state,
-    //     timers: {
-    //       ...state.timers,
-    //       [symbol]: Math.max(0, timeLeft - 1000), // Уменьшаем на 1 секунду
-    //     },
-    //   };
-    // }
-    case Game_State_Action.TIMER_TICK: {
+    case Game_State_Action.TICK: {
       const { now } = action;
 
-      // Sprawdź, czy czas obecnego gracza się skończył
-      if (!isTimerOver(state, now)) {
-        return state; // Czas się nie skończył, nic nie robimy
+      // Если игра закончена, не обрабатываем таймер
+      if (state.winnerSymbol) {
+        return state;
       }
 
-      // 1. Zaktualizuj timery - ustaw czas obecnego gracza na 0
+      // Проверяем, закончилось ли время у текущего игрока
+      if (!isTimerOver(state, now)) {
+        return state; // Время не закончилось, ничего не делаем
+      }
+
+      console.log(
+        `⏰ Время игрока ${state.currentCell} истекло! Переход к следующему игроку.`,
+      );
+
+      // 1. Обновляем таймеры - устанавливаем время текущего игрока на 0
       const updatedTimers = {
         ...state.timers,
         [state.currentCell]: 0,
       };
 
-      // 2. Znajdź następnego gracza, który ma jeszcze czas
+      // 2. Проверяем, есть ли игроки с оставшимся временем
+      const allPlayers = Move_Order.slice(0, state.playersCount);
+      const playersWithTime = allPlayers.filter(
+        (symbol) => updatedTimers[symbol] > 0,
+      );
+
+      if (playersWithTime.length === 0) {
+        console.log(`⏰ У всех игроков закончилось время! Ничья.`);
+        return {
+          ...state,
+          timers: updatedTimers,
+          winnerSymbol: "TIMEOUT", // Специальный символ для ничьи по времени
+        };
+      }
+
+      if (playersWithTime.length === 1) {
+        console.log(
+          `🎉 Игрок ${playersWithTime[0]} победил - у остальных закончилось время!`,
+        );
+        return {
+          ...state,
+          timers: updatedTimers,
+          winnerSymbol: playersWithTime[0], // Единственный оставшийся игрок побеждает
+        };
+      }
+
+      // 3. Находим следующего игрока, у которого есть время
       const nextPlayer = NextMove({
         currentMove: state.currentCell,
         playersCount: state.playersCount,
         timers: updatedTimers,
       });
 
-      // 3. Zaktualizuj stan gry
+      console.log(`➡️ Следующий игрок: ${nextPlayer}`);
+
+      // 4. Обновляем состояние игры
       return {
         ...state,
-        timers: updatedTimers, // Zaktualizowane timery
-        currentMoveStart: now, // Nowy czas rozpoczęcia ruchu
-        currentCell: nextPlayer, // Nowy aktywny gracz
+        timers: updatedTimers, // Обновленные таймеры
+        currentMoveStart: now, // Новое время начала хода
+        currentCell: nextPlayer, // Новый активный игрок
       };
     }
 
@@ -115,46 +176,32 @@ export const gameStateReducer = (state, action) => {
 function updateTimers(gameState, now) {
   const diff = now - gameState.currentMoveStart;
   const timer = gameState.timers[gameState.currentCell];
+  const newTime = Math.max(0, timer - diff); // Предотвращаем отрицательные значения
+
   return {
     ...gameState.timers,
-    [gameState.currentCell]: timer - diff,
+    [gameState.currentCell]: newTime,
   };
 }
 
-function updateCell(gameState, index) {
-  return NextMove({
-    currentMove: gameState.currentCell,
-    playersCount: gameState.playersCount,
-    timers: gameState.timers,
-  });
-}
-
 /**
- * Sprawdza, czy czas dla bieżącego gracza się skończył
- * @param {Object} gameState - Stan gry
- * @param {number} now - Aktualny czas
- * @returns {boolean} Czy czas się skończył
+ * Проверяет, закончилось ли время для текущего игрока
+ * @param {Object} gameState - Состояние игры
+ * @param {number} now - Текущее время
+ * @returns {boolean} Закончилось ли время
  */
 function isTimerOver(gameState, now) {
-  // Oblicz, ile czasu upłynęło od rozpoczęcia ruchu
+  // Вычисляем, сколько времени прошло с начала хода
   const elapsedTime = now - gameState.currentMoveStart;
 
-  // Pobierz pozostały czas dla bieżącego gracza
+  // Получаем оставшееся время для текущего игрока
   const currentTimer = gameState.timers[gameState.currentCell];
 
-  // Oblicz, ile czasu pozostało
+  // Вычисляем, сколько времени осталось
   const remainingTime = currentTimer - elapsedTime;
 
-  // Sprawdź, czy czas się skończył
+  // Проверяем, закончилось ли время
   const isExpired = remainingTime <= 0;
-
-  // Loguj tylko jeśli czas się skończył
-  if (isExpired) {
-    console.log(`Timer dla gracza ${gameState.currentCell} wygasł!`);
-    console.log(
-      `Początkowy czas: ${currentTimer}ms, upłynęło: ${elapsedTime}ms, pozostało: ${remainingTime}ms`,
-    );
-  }
 
   return isExpired;
 }
